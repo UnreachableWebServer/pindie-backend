@@ -24,5 +24,9 @@ app.use(
 );
 
 app.listen(PORT, () => {
-    console.log(`Server is running at PORT http://localhost:${PORT}`)
+    console.log(`Server is running at PORT http://localhost:${PORT}`);
 });
+
+// git add .
+// git commit -m
+// git push
