@@ -36,11 +36,31 @@ const updateCategory = async (req, res, next) => {
 };
 
 const deleteCategory = async (req, res, next) => {
+    console.log("DELETE /categories/:id");
     try {
         req.category = await categories.findByIdAndDelete(req.params.id);
         next();
     } catch (error) {
         res.status(400).send({ message: "Error deleting category" });
+    }
+};
+
+const checkIsCategoryExists = async (req, res, next) => {
+    const isInArray = req.categoriesArray.find((category) => {
+        return req.body.name === category.name;
+    });
+    if (isInArray) {
+        res.status(400).send({ message: "Категория с таким названием уже существует" });
+    } else {
+        next();
+    }
+};
+
+const checkEmptyName = async (req, res, next) => {
+    if (!req.body.name) {
+        res.status(400).send({ message: "Введите название категории" });
+    } else {
+        next();
     }
 };
 
@@ -50,4 +70,6 @@ module.exports = {
     findCategoryById,
     updateCategory,
     deleteCategory,
+    checkIsCategoryExists,
+    checkEmptyName,
 };
