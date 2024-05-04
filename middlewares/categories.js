@@ -1,8 +1,19 @@
 const categories = require('../models/category');
 
 const findAllCategories = async (req, res, next) => {
+    console.log("GET /categories");
     req.categoriesArray = await categories.find({});
     next();
+};
+
+const findCategoryById = async (req, res, next) => {
+    console.log("GET /categories/:id");
+    try {
+        req.category = await categories.findById(req.params.id);
+        next();
+    } catch (error) {
+        res.status(404).send({ message: "Category not found" });
+    }
 };
 
 const createCategory = async (req, res, next) => {
@@ -13,16 +24,6 @@ const createCategory = async (req, res, next) => {
         next();
     } catch (error) {
         res.status(400).send("Error creating category");
-    }
-};
-
-const findCategoryById = async (req, res, next) => {
-    console.log("GET /categories/:id");
-    try {
-        req.category = await categories.findById(req.params.id);
-        next();
-    } catch (error) {
-        res.status(404).send({ message: "Category not found" });
     }
 };
 

@@ -1,8 +1,23 @@
 const users = require('../models/user');
+const bcrypt = require("bcryptjs");
 
 const findAllUsers = async (req, res, next) => {
+    console.log("GET /users");
     req.usersArray = await users.find({});
+    // Используя опцию проекции, можно указать, какие поля включать или исключать из запроса
+    // req.usersArray = await users.find({}, { password: 0 });
     next();
+};
+
+const findUserById = async (req, res, next) => {
+    console.log("GET /users/:id");
+    try {
+        req.user = await users.findById(req.params.id);
+        // req.user = await users.findById(req.params.id, { password: 0 });
+        next();
+    } catch (error) {
+        res.status(404).send({ message: "User not found" });
+    }
 };
 
 const createUser = async (req, res, next) => {
@@ -13,16 +28,6 @@ const createUser = async (req, res, next) => {
         next();
     } catch (error) {
         res.status(400).send("Error creating user");
-    }
-};
-
-const findUserById = async (req, res, next) => {
-    console.log("GET /users/:id");
-    try {
-        req.user = await users.findById(req.params.id);
-        next();
-    } catch (error) {
-        res.status(404).send({ message: "User not found" });
     }
 };
 
@@ -64,6 +69,31 @@ const checkEmptyNameAndEmail = async (req, res, next) => {
     }
 };
 
+const filterPassword = (req, res, next) => {
+    const filterUser = (user) => {
+        const { password, ...userWithoutPassword } = user.toObject();
+        return userWithoutPassword;
+    };
+    if (req.user) {
+        req.user = filterUser(req.user);
+    }
+    if (req.usersArray) {
+        req.usersArray = req.usersArray.map((user) => filterUser(user));
+    }
+    next();
+};
+
+const hashPassword = async (req, res, next) => {
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(req.body.password, salt);
+        req.body.password = hash;
+        next();
+    } catch (error) {
+        res.status(400).send({ message: "Ошибка хеширования пароля" });
+    }
+};
+
 module.exports = {
     findAllUsers,
     createUser,
@@ -72,4 +102,6 @@ module.exports = {
     deleteUser,
     checkIsUserExists,
     checkEmptyNameAndEmail,
+    filterPassword,
+    hashPassword,
 };
