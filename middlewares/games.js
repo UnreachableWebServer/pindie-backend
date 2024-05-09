@@ -62,7 +62,7 @@ const checkEmptyFields = async (req, res, next) => {
     }
 };
 
-const checkIfCategoriesAvaliable = async (req, res, next) => {
+const checkIfCategoriesAvailable = async (req, res, next) => {
     if (!req.body.categories || req.body.categories.length === 0) {
         res.headers = { "Content-Type": "application/json" };
         res.status(400).send({ message: "Выбери хотя бы одну категорию" });
@@ -102,7 +102,7 @@ module.exports = {
     updateGame,
     deleteGame,
     checkEmptyFields,
-    checkIfCategoriesAvaliable,
+    checkIfCategoriesAvailable,
     checkIfUsersAreSafe,
     checkIsGameExists,
 };

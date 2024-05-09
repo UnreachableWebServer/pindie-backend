@@ -28,7 +28,6 @@ usersRouter.post(
   "/users",
   findAllUsers,
   checkIsUserExists,
-  checkEmptyNameAndEmailAndPassword,
   checkAuth,
   hashPassword,
   createUser,

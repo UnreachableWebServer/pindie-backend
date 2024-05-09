@@ -1,8 +1,10 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require("cookie-parser");
 
 const apiRouter = require('./routes/api');
+const pagesRouter = require('./routes/pages');
 
 const connectToDatabase = require('./database/connect');
 const cors = require('./middlewares/cors');
@@ -14,6 +16,7 @@ connectToDatabase();
 
 app.use(
     cors,
+    cookieParser(),
     bodyParser.json(),
     pagesRouter,
     apiRouter,
@@ -23,6 +26,8 @@ app.use(
 app.listen(PORT, () => {
     console.log(`Server is running at PORT http://localhost:${PORT}`);
 });
+
+// Запуск приложения: npm run start
 
 // git add .
 // git commit -m
