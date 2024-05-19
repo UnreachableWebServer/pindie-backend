@@ -1,6 +1,6 @@
 const gamesRouter = require('express').Router();
 
-const { findAllGames, createGame, findGameById, updateGame, deleteGame, checkEmptyFields, checkIfUsersAreSafe, checkIsGameExists, checkIfCategoriesAvailable } = require('../middlewares/games');
+const { findAllGames, createGame, findGameById, updateGame, deleteGame, checkEmptyFields, checkIfUsersAreSafe, checkIsGameExists, checkIfCategoriesAvailable, checkIsVoteRequest } = require('../middlewares/games');
 const { sendAllGames, sendGameCreated, sendGameById, sendGameUpdated, sendGameDeleted } = require('../controllers/games');
 const { checkAuth } = require('../middlewares/auth');
 
@@ -30,6 +30,7 @@ gamesRouter.post(
 gamesRouter.put(
     "/games/:id",
     findGameById,
+    checkIsVoteRequest,
     checkIfUsersAreSafe,
     checkIfCategoriesAvailable,
     checkEmptyFields,
