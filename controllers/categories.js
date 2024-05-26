@@ -15,7 +15,7 @@ const sendCategoryById = (req, res) => {
 
 const sendCategoryUpdated = (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    res.end("Category has been updated");
+    res.end({ message: "Category has been updated" });
 };
 
 const sendCategoryDeleted = (req, res) => {

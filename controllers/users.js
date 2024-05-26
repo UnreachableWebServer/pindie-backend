@@ -20,7 +20,7 @@ const sendUserById = (req, res) => {
 
 const sendUserUpdated = (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    res.end("User has been updated");
+    res.end({ message: "User has been updated" });
 };
 
 const sendUserDeleted = (req, res) => {
